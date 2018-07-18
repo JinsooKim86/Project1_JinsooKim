@@ -15,9 +15,9 @@ shinyUI(dashboardPage(
         menuItem("Empty now", tabName = "empty", icon = icon("circle"))
       ),
       
-      selectizeInput("selected",
-                     "Choose an item for display",
-                     choice)
+      selectizeInput("selected_country", "Country", country_choice),
+      
+      selectizeInput("selected_year", "Year", year_choice)
     ),
     
     dashboardBody(
@@ -35,7 +35,7 @@ shinyUI(dashboardPage(
                          infoBoxOutput("minBox"),
                          infoBoxOutput("avgBox")),
                 fluidRow(box(htmlOutput("map"), height = 400),
-                         box(htmlOutput("hist"), height = 400))),
+                         box(htmlOutput("bar"), height = 400))),
         
         tabItem(tabName = "graphs",
                 fluidRow(box(title='graphs', 'googlecombochart', width=12))),

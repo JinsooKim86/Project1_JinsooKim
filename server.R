@@ -1,17 +1,19 @@
 library(DT)
 library(shiny)
 library(googleVis)
+library(dplyr)
+library(ggplot2)
 
 shinyServer(function(input, output){
   output$map <- renderGvis({
-    gvisGeoChart(trade_data, "country", input$selected,
+    gvisGeoChart(trade_data_agg[trade_data_agg$year == input$selected_year, ], 'country', 'export_amount',
                  options=list(region="150", displayMode="regions", 
                               resolution="countries",
                               width="auto", height="auto"))
   })
   
-  output$hist <- renderGvis({
-    gvisBarChart(trade_data, xvar = input$selected, yvar = 'export_amount')
+  output$bar <- renderGvis({
+    gvisBarChart(trade_data, xvar = input$selected_country, yvar = 'export_amount')
   })
   
   output$table <- DT::renderDataTable({
