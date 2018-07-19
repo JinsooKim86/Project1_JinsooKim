@@ -13,11 +13,7 @@ shinyUI(dashboardPage(
         menuItem("Graphs", tabName = "graphs", icon = icon("signal")),
         menuItem("Tables", tabName = "tables", icon = icon("th")),
         menuItem("Empty now", tabName = "empty", icon = icon("circle"))
-      ),
-      
-      selectizeInput("selected_country", "Country", country_choice),
-      
-      selectizeInput("selected_year", "Year", year_choice)
+      )
     ),
     
     dashboardBody(
@@ -31,9 +27,9 @@ shinyUI(dashboardPage(
                              br(),'Thank you for visiting.'))),
         
         tabItem(tabName = "explore",
-                fluidRow(infoBoxOutput("maxBox"),
-                         infoBoxOutput("minBox"),
-                         infoBoxOutput("avgBox")),
+                fluidRow(box(selectizeInput("selected_ei", "Export/Import", ei_choice), 
+                             sliderInput("selected_year", "Year", min = min(year_choice), max = max(year_choice), max(year_choice), value = 1, step = 1), width=6, height=200),
+                         box(selectizeInput("selected_country", "Country", country_choice), width=6, height=200)),
                 fluidRow(box(htmlOutput("map"), height = 400),
                          box(htmlOutput("bar"), height = 400))),
         
