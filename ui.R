@@ -31,7 +31,7 @@ shinyUI(dashboardPage(
                              sliderInput("selected_year", "Year", min = min(year_choice), max = max(year_choice), max(year_choice), value = 1, step = 1), width=6, height=200),
                          box(selectizeInput("selected_country", "Country", country_choice), width=6, height=200)),
                 fluidRow(box(htmlOutput("map"), height = 400),
-                         box(htmlOutput("bar"), height = 400))),
+                         box(plotOutput("bar"), height = 400))),
         
         tabItem(tabName = "graphs",
                 fluidRow(box(title='graphs', 'googlecombochart', width=12))),
