@@ -12,7 +12,7 @@ shinyServer(function(input, output) {
   }, ignoreNULL = FALSE)
   
   output$mymap <- renderLeaflet({
-    leaflet(width = 400, height = 400) %>% addPopups(104.305018, 52.286974, 'Irkutsk') %>% addPopups(24.9384, 60.1699, 'Helsinki') %>% addPopups(13.4050, 52.5200, 'Berlin') %>% addPopups(7.2620, 43.7102, 'Nice') %>% addPopups(2.3354, 48.8373, 'Paris') %>% addTiles() %>% addPopups(37.6573, 55.7768, 'Moscow') %>% addPopups(131.881622, 43.111274, 'Vladivostok') %>% addPopups(125.736423, 39.004894, 'Pyongyang') %>% addPopups(129.042259, 35.115214, 'Busan') 
+    leaflet(width = 400, height = 400) %>% addTiles() %>% addPopups(lng = stations$lng, lat = stations$lat, popup = stations$popup)
   })
   
   output$map <- renderGvis({
