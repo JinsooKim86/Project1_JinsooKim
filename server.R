@@ -3,6 +3,7 @@ library(shiny)
 library(googleVis)
 library(dplyr)
 library(ggplot2)
+library(leaflet)
 
 shinyServer(function(input, output) {
   

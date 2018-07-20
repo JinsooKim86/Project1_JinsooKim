@@ -1,6 +1,7 @@
 library(DT)
 library(shiny)
 library(shinydashboard)
+library(leaflet)
 
 shinyUI(dashboardPage(
   dashboardHeader(title = 'Trade Data'),
