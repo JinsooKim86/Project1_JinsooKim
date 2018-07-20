@@ -1,13 +1,13 @@
-trade_data <- read.csv('trade_table.csv', stringsAsFactors = FALSE)
 library(dplyr)
+trade_data <- read.csv('trade_table.csv', stringsAsFactors = FALSE)
 trade_data[trade_data$country == 'UK', ]$country <- 'GB'
-
 trade_data$HS_code <- sprintf('%02d', trade_data$HS_code)
-trade_data$year <- as.integer(trade_data$year)
+trade_data <- trade_data %>% arrange(country)
 
-trade_data <- trade_data %>% select(year, country, export_amount, import_amount, description, HS_code) %>% arrange(country, desc(export_amount))
-agg <- trade_data %>% group_by(country, year, HS_code) %>% summarise(export_amount = sum(export_amount), import_amount = sum(import_amount))
+exim_glo <- c('Export', 'Import')
+years_glo <- unique(trade_data$year)
+countries_glo <- unique(trade_data$country)
 
-ei_choice <- c('export_amount', 'import_amount')
-year_choice <- unique(agg$year)
-country_choice <- unique(agg$country)
+#geochartdata <- trade_data %>% select(year, country, export_amount, import_amount) %>% group_by(year, country) %>% summarise(export = sum(export_amount), import = sum(import_amount))
+#barplotdata <- trade_data %>% select(year, country, export_amount, import_amount, HS_code) %>% group_by(year, country, HS_code) %>% summarise(export = sum(export_amount), import = sum(import_amount))
+#years <- unique(trade_data$year)
