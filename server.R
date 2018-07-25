@@ -76,7 +76,7 @@ shinyServer(function(input, output) {
     trend_data <- trend_data[trend_data$country == input$country5_ui, ]
     agg_data <- trend_data %>% group_by(country,class) %>% summarise(Amount = sum(Amount)) %>% arrange(desc(Amount)) %>% head(input$highrank5_ui)
     trend_data <- trend_data[trend_data$class %in% unique(agg_data$class), ]
-    ggplot(trend_data, aes(x = year, y = Amount, group = class, color = class)) + geom_point(aes(size = Amount)) + geom_line(stat = 'identity') + scale_y_continuous(labels = scales::comma)
+    ggplot(trend_data, aes(x = year, y = Amount, group = class, color = class)) + geom_point(aes(size = Amount)) + geom_line(stat = 'identity') + scale_y_continuous(labels = scales::comma) + ylab('Amount 1,000USD')
   })
   
   output$trendplot <- renderPlot({
@@ -84,30 +84,13 @@ shinyServer(function(input, output) {
     agg_data <- trend_data %>% group_by(country, description) %>% summarise(Amount = sum(Amount))
     rank <- agg_data[agg_data$description == input$commodity_ui, ] %>% arrange(desc(Amount)) %>% head(input$highrank_ui)
     trend_data <- trend_data[trend_data$country %in% unique(rank$country) & trend_data$description == input$commodity_ui & trend_data$year != 2018, ]
-    ggplot(trend_data, aes(x = year, y = Amount, group = country, color = country)) + geom_point(aes(size = Amount)) + geom_line(stat = 'identity') + scale_y_continuous(labels = scales::comma)
+    ggplot(trend_data, aes(x = year, y = Amount, group = country, color = country)) + geom_point(aes(size = Amount)) + geom_line(stat = 'identity') + scale_y_continuous(labels = scales::comma) + ylab('Amount 1,000USD')
   })
   
-  output$top <- renderPlot({
-    topplot <- trade_data %>% select(year, country, export_weight, export_amount, import_weight, import_amount, hs_code, description) %>% arrange(desc(export_amount))
-    topplot <- topplot[topplot$year == input$year2_ui & topplot$country == input$country2_ui, ] %>% head(input$rank2_ui)
-    ggplot(topplot, aes(x = reorder(hs_code, -export_amount), y = export_amount, fill = hs_code)) + geom_bar(stat = 'identity') + geom_text(aes(label=description), size=3) + coord_flip() + xlab('HS_code') + ylab('Amount 1,000USD')
-  })
-  
-  #output$weight <- renderPlot({
-    #topplot <- trade_data %>% select(year, country, export_weight, export_amount, import_weight, import_amount, HS_code, description) %>% arrange(desc(export_amount))
-    #topplot <- topplot[topplot$year == input$year2_ui & topplot$country == input$country2_ui, ] %>% head(input$rank2_ui)
-    #ggplot(trade_data[trade_data$HS_code == topplot$HS_code & trade_data$year == input$year2_ui, ], aes(x = export_amount, y = export_weight, col = HS_code)) + geom_point(stat = 'identity', position = 'jitter')
-  #})
-  
-  output$weight <- renderPlot({
-    topplot <- trade_data %>% select(year, country, export_weight, export_amount, import_weight, import_amount, hs_code, description) %>% arrange(desc(export_amount))
-    topplot <- topplot[topplot$year == input$year2_ui & topplot$country == input$country2_ui, ] %>% head(input$rank2_ui)
-    ggplot(trade_data[trade_data$hs_code == topplot$hs_code & trade_data$year == input$year2_ui, ], aes(x=export_amount, y=export_weight, color=hs_code, size=export_weight)) + geom_point(stat = 'identity', position = 'jitter')
-  })
-  
-  output$bar <- renderPlot({
-    plotdata <- trade_data %>% select(year, country, Export = export_amount, Import = import_amount, hs_code)
-    ggplot(plotdata[plotdata$country == input$country_ui & plotdata$year == input$year_ui, ], aes(x = reorder(hs_code, -Export), y = Export, fill = hs_code)) + geom_bar(stat = 'identity') + xlab('HS_code') + ylab('Amount 1,000USD')
+  output$geochart <- renderGvis({
+    geodata <- trade_data %>% select(year, country, description, Amount = ifelse(input$exim6_ui == 'export_amount', 'export_amount', 'import_amount')) %>% group_by(year, country, description) %>% summarise(Amount = sum(Amount))
+    geodata <- geodata[geodata$year == input$year6_ui & geodata$description == input$commodity6_ui, ]
+    gvisGeoChart(geodata, 'country', 'Amount', options = list(region = '150', displayMode = 'regions', resolution = 'countries', width = 1200, height = 600))
   })
   
 })

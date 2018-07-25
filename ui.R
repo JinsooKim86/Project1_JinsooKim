@@ -12,8 +12,9 @@ shinyUI(dashboardPage(
       menuItem('Introduction', tabName = 'introduction', icon = icon('bookmark')),
       menuItem('Explore', tabName = 'explore', icon = icon('search')),
       menuItem('Comparing Export/Import', tabName = 'compare', icon = icon('clone')),
-      menuItem('Trend Plot (Country, Class)', tabName = 'countrytrend', icon = icon('globe')),
+      menuItem('Trend Plot (Country, Class)', tabName = 'countrytrend', icon = icon('asterisk')),
       menuItem('Trend Plot (Commodity, Country)', tabName = 'trend', icon = icon('asterisk')),
+      menuItem('Geochart', tabName = 'geochart', icon = icon('globe')),
       menuItem('Tables', tabName = 'tables', icon = icon('th'))
     )
   ),
@@ -47,19 +48,25 @@ shinyUI(dashboardPage(
                        column(4,box(textOutput('comparing_text2'), plotOutput('comparing_plot2', height = 580), width = 'auto', height = 620)))),
       
       tabItem(tabName = 'countrytrend',
-              fluidRow(box(plotOutput('countryplot'), width = 'auto', height = 450)),
-              fluidRow(column(6, box(selectizeInput('exim5_ui', 'Data', exim_glo),
-                                     sliderInput('highrank5_ui', 'Number of high ranked class', min = 1, max = 15, value = 15, step = 1), width = 'auto', height = 200)), 
-                       column(6, box(selectizeInput('country5_ui', 'Country', countries_glo), width = 'auto', height = 200)), width = 'auto', height = 200)),
+              fluidRow(box(plotOutput('countryplot'), width = 'auto', height = 500)),
+              fluidRow(column(4, box(selectizeInput('exim5_ui', 'Data', exim_glo), width = 'auto', height = 200)),
+                       column(4, box(sliderInput('highrank5_ui', 'Number of high ranked class', min = 1, max = 15, value = 15, step = 1), width = 'auto', height = 100)), 
+                       column(4, box(selectizeInput('country5_ui', 'Country', countries_glo), width = 'auto', height = 100)))),
       
       tabItem(tabName = 'trend',
-              fluidRow(box(plotOutput('trendplot'), width = 'auto', height = 450)),
-              fluidRow(column(6, box(selectizeInput('exim4_ui', 'Data', exim_glo), 
-                                     sliderInput('highrank_ui', 'Number of high ranked countries', min = 1, max = 10, value = 10, step = 1), width = 'auto', height = 200)), 
-                       column(6, box(selectizeInput('commodity_ui', 'Commodity', commodities_glo), width = 'auto', height = 200)), width = 'auto', height = 200)),
+              fluidRow(box(plotOutput('trendplot'), width = 'auto', height = 500)),
+              fluidRow(column(4, box(selectizeInput('exim4_ui', 'Data', exim_glo), width = 'auto', height = 200)), 
+                       column(4, box(sliderInput('highrank_ui', 'Number of high ranked countries', min = 1, max = 10, value = 10, step = 1), width = 'auto', height = 100)), 
+                       column(4, box(selectizeInput('commodity_ui', 'Commodity', commodities_glo), width = 'auto', height = 100)), width = 'auto', height = 100)),
         
       tabItem(tabName = 'tables',
-              fluidRow(box('(Unit : amount 1,000USD, weight 1ton)', DT::dataTableOutput('table'), width=12)))
+              fluidRow(box('(Unit : amount 1,000USD, weight 1ton)', DT::dataTableOutput('table'), width=12))),
+      
+      tabItem(tabName = 'geochart',
+              fluidRow(column(2, box(selectizeInput('exim6_ui', 'Data', exim_glo), 
+                                     selectizeInput('year6_ui', 'Year', years_glo),
+                                     selectizeInput('commodity6_ui', 'Commodity', commodities_glo), width = 'auto', height = 620)),
+                       column(10, box(htmlOutput('geochart'), width = 'auto', height = 620))))
     )
   )
 ))
